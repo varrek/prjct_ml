@@ -23,7 +23,7 @@ class RozetkaSpider(Spider):
         self.title_xpath = '/html/body/app-root/div/div/rz-product/div/rz-product-top/div/div[1]/h1'
         self.description_xpath = '//*[@id="#scrollArea"]/div[2]/div[1]/app-text-content/div/div'
         self.category_xpath = '/html/body/app-root/div/div/rz-product/div/rz-product-top/div/app-breadcrumbs/ul/li[4]/a/span'
-        self.next_page_xpath = '/html/body/app-root/div/div/rz-category/div/main/rz-catalog/div/div/section/rz-catalog-paginator/app-paginator/div/ul/li[2]/a/@href'
+        self.next_page_xpath = '/html/body/app-root/div/div/rz-category/div/main/rz-catalog/div/div/section/rz-catalog-paginator/app-paginator/div/a[2]/@href'
 
 
     def parse(self, response, **kwargs):
