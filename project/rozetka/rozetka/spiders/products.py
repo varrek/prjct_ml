@@ -41,7 +41,7 @@ class RozetkaSpider(Spider):
             url = response.urljoin(href.extract())
             yield Request(url,callback=self.parse_main_item)
 
-        next_page = response.xpath("//*[@id='toolbar-btm']/div/div[4]/div/ol/li[3]/a/@href").extract_first()
+        next_page = response.xpath(self.next_page_xpath).extract_first()
         if next_page is not None:
             url = response.urljoin(next_page)
             yield Request(url, callback=self.parse_subcategory, dont_filter=True)
