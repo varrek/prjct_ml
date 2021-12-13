@@ -8,6 +8,8 @@ from scrapy import Item, Field
 
 class RozetkaItem(Item):
     title = Field()
-    category = Field()
+    deep_category = Field()
+    main_category = Field()
+    deep_category_minus_one = Field()
     description = Field()
     pass

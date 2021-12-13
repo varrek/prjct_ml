@@ -18,7 +18,9 @@ class RozetkaSpider(Spider):
         self.get_all_items_xpath = '/html/body/app-root/div/div/rz-category/div/main/rz-catalog/div/div/section/rz-grid/ul/li/app-goods-tile-default/div/div[2]/a[2]/@href'
         self.title_xpath = '/html/body/app-root/div/div/rz-product/div/rz-product-top/div/div[1]/h1'
         self.description_xpath = '//*[@id="#scrollArea"]/div[2]/div[1]/app-text-content/div/div'
-        self.category_xpath = '/html/body/app-root/div/div/rz-product/div/rz-product-top/div/app-breadcrumbs/ul/li[4]/a/span'
+        self.deep_category_xpath = '//*[contains(@class, "breadcrumbs__item--last")]'
+        self.deep_category_minus_one_xpath = '//*[contains(@class, "breadcrumbs__item--last")]/preceding::li[1]'
+        self.main_cat_xpath = '//ul[contains(@class, "breadcrumbs")]/li[2]'
         self.next_page_xpath = '/html/body/app-root/div/div/rz-category/div/main/rz-catalog/div/div/section/rz-catalog-paginator/app-paginator/div/a[2]/@href'
 
     def parse(self, response, **kwargs):
@@ -47,7 +49,13 @@ class RozetkaSpider(Spider):
         title = response.xpath(self.title_xpath).extract()
         title = self.process_xpath_elemnt(title)
 
-        category = response.xpath(self.category_xpath).extract()
+        main_category = response.xpath(self.main_cat_xpath).extract()
+        main_category = self.process_xpath_elemnt(main_category)
+
+        deep_category_minus_one = response.xpath(self.deep_category_minus_one_xpath).extract()
+        deep_category_minus_one = self.process_xpath_elemnt(deep_category_minus_one)
+
+        category = response.xpath(self.deep_category_xpath).extract()
         category = self.process_xpath_elemnt(category)
 
         description = response.xpath(self.description_xpath).extract()
@@ -55,7 +63,9 @@ class RozetkaSpider(Spider):
 
         # Put each element into its item attribute.
         item['title'] = title
-        item['category'] = category
+        item['main_category'] = main_category
+        item['deep_category_minus_one'] = deep_category_minus_one
+        item['deep_category'] = category
         item['description'] = description
         return item
 
