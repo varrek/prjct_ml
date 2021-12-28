@@ -22,7 +22,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     #TODO with argparse
-    group_size = 200000
+    group_size = 100
 
     logger.debug("Starting preprocessing.")
 

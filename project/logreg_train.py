@@ -9,7 +9,10 @@ from sklearn.metrics import f1_score
 from sklearn.pipeline import Pipeline
 import time
 from datetime import datetime as dt
-
+import nltk
+from nltk.corpus import stopwords
+nltk.download("stopwords")
+russian_stopwords = stopwords.words("russian")
 # TODO make as parameters
 MAX_DF = 0.7
 MIN_DF = 5
@@ -49,7 +52,7 @@ def read_dataset(input_dir, subset):
 
 if __name__ == '__main__':
 
-    logreg = Pipeline(steps=[("vectorizer", TfidfVectorizer(max_df=MAX_DF, min_df=MIN_DF)),
+    logreg = Pipeline(steps=[("vectorizer", TfidfVectorizer(max_df=MAX_DF, min_df=MIN_DF, stop_words=russian_stopwords)),
                              ("log_reg", LogisticRegression(n_jobs=N_JOBS,
                                                             solver="saga",
                                                             multi_class="multinomial",
