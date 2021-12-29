@@ -38,7 +38,7 @@ if __name__ == "__main__":
     # The least populated class in y has only 1 member, which is too few. The minimum
     # number of groups for any class cannot be less than 2.
     # We have six (x, y train; x, y test; x, y val)
-    sample = sample[sample[label_column].isin(v.index[v.gt(6)])]
+    sample = sample[sample[label_column].isin(v.index[v.gt(200)])]
 
     classes = sample[label_column].unique()
     columns_to_drop =  sample.columns[~sample.columns.isin(features)]
