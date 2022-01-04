@@ -14,9 +14,9 @@ class MyDict(dict):
 fs = s3fs.S3FileSystem(anon=False)
 embed = hub.load("https://tfhub.dev/google/universal-sentence-encoder-multilingual/3")
 
-vectorizer = joblib.load("models/logreg_all_data_with_cats_gt_50/tf_idf_vectorizer.joblib")
-model = joblib.load("models/logreg_all_data_with_cats_gt_50/model_log_reg.joblib")
-df = joblib.load('models/usem_all_data_with_cats_gt_50/df_cats.joblib')
+vectorizer = joblib.load("./models/logreg_all_data_with_cats_gt_50/tf_idf_vectorizer.joblib")
+model = joblib.load("./models/logreg_all_data_with_cats_gt_50/model_log_reg.joblib")
+df = joblib.load('./models/usem_all_data_with_cats_gt_50/df_cats.joblib')
 
 
 def clear_usem_predict(text):
@@ -72,8 +72,8 @@ def main():
         prediction = clear_usem_predict(text)
         process_prediction(text, prediction)
     elif option == 'Tensorflow USE':
-        new_model = tf.keras.models.load_model('models/usem_all_data_with_cats_gt_50')
-        mapping_dict = joblib.load('models/usem_all_data_with_cats_gt_50/mapping_dict_reverse')
+        new_model = tf.keras.models.load_model('./models/usem_all_data_with_cats_gt_50')
+        mapping_dict = joblib.load('./models/usem_all_data_with_cats_gt_50/mapping_dict_reverse')
         prediction = new_model.predict([text])
         index = np.argmax(prediction)
         prediction = mapping_dict[index]
