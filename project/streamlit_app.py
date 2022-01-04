@@ -13,14 +13,12 @@ class MyDict(dict):
     def __missing__(self, key):
         return None
 fs = s3fs.S3FileSystem(anon=False)
-embed = hub.load("https://tfhub.dev/google/universal-sentence-encoder-multilingual/3")
 path = os.path.dirname(__file__)
-vectorizer = joblib.load(path + "/models/logreg_all_data_with_cats_gt_50/tf_idf_vectorizer.joblib")
-model = joblib.load(path + "/models/logreg_all_data_with_cats_gt_50/model_log_reg.joblib")
+
 df = joblib.load(path + '/models/usem_all_data_with_cats_gt_50/df_cats.joblib')
 
 
-def clear_usem_predict(text):
+def clear_usem_predict(text, embed):
     embed_text = np.asarray(embed(text))
     cos_sim = cosine_similarity(embed_text, df['cat_embeding'].tolist())
     indexes = np.argmax(cos_sim, axis=1)
@@ -29,7 +27,7 @@ def clear_usem_predict(text):
     return cats
 
 
-def logreg_predict(text):
+def logreg_predict(text,  vectorizer, model):
     logreg = Pipeline(steps=[("vectorizer", vectorizer),
                              ("log_reg", model)
                              ],
@@ -67,10 +65,13 @@ def main():
     text = st.text_area("Enter product description", placeholder="Type Here")
     # Display results of the NLP task
     if option == 'Logistics regression':
-        prediction = logreg_predict(text)
+        vectorizer = joblib.load(path + "/models/logreg_all_data_with_cats_gt_50/tf_idf_vectorizer.joblib")
+        model = joblib.load(path + "/models/logreg_all_data_with_cats_gt_50/model_log_reg.joblib")
+        prediction = logreg_predict(text, vectorizer, model)
         process_prediction(text, prediction)
     elif option == 'USE classifier without training':
-        prediction = clear_usem_predict(text)
+        embed = hub.load("https://tfhub.dev/google/universal-sentence-encoder-multilingual/3")
+        prediction = clear_usem_predict(text, embed)
         process_prediction(text, prediction)
     elif option == 'Tensorflow USE':
         new_model = tf.keras.models.load_model(path + '/models/usem_all_data_with_cats_gt_50')
